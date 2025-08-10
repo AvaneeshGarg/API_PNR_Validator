@@ -1,0 +1,37 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+defaults:
+  run:
+    working-directory: vite-frontend
+
+jobs:
+  test-basic:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('vite-frontend/package-lock.json') }}
+          restore-keys: m2-${{ runner.os }}-
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test -- --watch=false
