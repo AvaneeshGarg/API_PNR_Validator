@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Backend Connection Test</title>
+  </head>
+  <body>
+    <h1>Backend Connection Test</h1>
+    <button onclick="testConnection()">Test Backend Connection</button>
+    <button onclick="testDetection()">Test Detection API</button>
+    <div id="results"></div>
+
+    <script>
+      async function testConnection() {
+        const results = document.getElementById("results");
+        results.innerHTML = "Testing connection...";
+
+        try {
+          const response = await fetch(
+            "http://localhost:8080/api/ollama/status"
+          );
+          const data = await response.json();
+          results.innerHTML = `
+                    <h3>Connection Test Result:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+        } catch (error) {
+          results.innerHTML = `
+                    <h3>Connection Error:</h3>
+                    <p style="color: red;">${error.message}</p>
+                `;
+        }
+      }
+
+      async function testDetection() {
+        const results = document.getElementById("results");
+        results.innerHTML = "Testing detection API...";
+
+        const testData = {
+          name: "John Doe",
+          date: "1990-01-01",
+          iata: "US",
+          seatNumber: "12A",
+          cabinClass: "A",
+        };
+
+        try {
+          const response = await fetch("http://localhost:8080/api/detect", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(testData),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          results.innerHTML = `
+                    <h3>Detection Test Result:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+        } catch (error) {
+          results.innerHTML = `
+                    <h3>Detection Error:</h3>
+                    <p style="color: red;">${error.message}</p>
+                `;
+        }
+      }
+    </script>
+  </body>
+</html>
