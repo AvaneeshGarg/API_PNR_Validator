@@ -41,7 +41,7 @@ jobs:
 
       - name: Upload surefire/failsafe reports
         if: always()
-        uses: actions/upload-artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: junit-reports
           path: |
