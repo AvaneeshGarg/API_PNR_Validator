@@ -30,6 +30,25 @@ jobs:
       - name: Run tests
         run: mvn -B clean verify
 
+      - name: Publish JUnit Summary
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: |
+            **/target/surefire-reports/*.xml
+            **/target/failsafe-reports/*.xml
+          require_tests: false
+
+      - name: Upload surefire/failsafe reports
+        if: always()
+        uses: actions/upload-artifacts@v4
+        with:
+          name: junit-reports
+          path: |
+            **/target/surefire-reports/*
+            **/target/failsafe-reports/*
+          retention-days: 7
+
   test-with-mongo:
     runs-on: ubuntu-latest
     services:
