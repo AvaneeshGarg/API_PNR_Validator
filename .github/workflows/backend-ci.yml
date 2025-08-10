@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  test-basic:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,17 +29,19 @@ jobs:
 
       - name: Run tests
         run: mvn -B clean verify
-  
-  test:
+
+  test-with-mongo:
     runs-on: ubuntu-latest
     services:
       mongo:
         image: mongo:7
-        ports: ["27017:27017"]
+        ports:
+          - 27017:27017
         options: >-
-          --health-cmd "mongosh --eval 'db.runCommand({ping: 1})'"
+          --health-cmd "mongo --eval 'db.runCommand({ping: 1})'"
           --health-interval 10s
           --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout
@@ -60,5 +62,5 @@ jobs:
 
       - name: Run tests (with Mongo)
         env:
-          SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/testdb
+          SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/try
         run: mvn -B clean verify
