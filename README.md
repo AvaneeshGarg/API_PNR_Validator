@@ -255,10 +255,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - React and Vite teams for modern frontend tooling
 - MongoDB for reliable data storage
 
-## Support
-
-For support, email [your-email@example.com] or create an issue in the GitHub repository.
-
----
 
 **Built with love using Spring Boot, React, and Ollama AI**
